@@ -8,29 +8,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Biblioteca {
+
     private final List<Libro> libros;
 
     public Biblioteca() {
         this.libros = new ArrayList<>();
     }
 
+    // ✔ agregar libro con validación
     public void agregarLibro(Libro libro) {
-        if (libro != null) {
-            this.libros.add(libro);
+        if (libro == null) {
+            throw new IllegalArgumentException("El libro no puede ser null");
         }
+        libros.add(libro);
     }
 
+    // ✔ devuelve copia (no la lista original)
     public List<Libro> obtenerLibros() {
-        // Devuelve una copia para cumplir con la protección de la lista original
-        return new ArrayList<>(this.libros);
+        return new ArrayList<>(libros);
     }
 
-    public Libro buscarPorTitulo(String titulo) {
+    // ✔ NUNCA devuelve null (esto era tu error principal)
+    public List<Libro> buscarPorTitulo(String titulo) {
+
+        if (titulo == null || titulo.trim().isEmpty()) {
+            throw new IllegalArgumentException("El título no puede ser null ni vacío");
+        }
+
+        List<Libro> resultados = new ArrayList<>();
+
         for (Libro libro : libros) {
-            if (libro.getTitulo().equalsIgnoreCase(titulo)) {
-                return libro;
+            if (libro.getTitulo().toLowerCase().contains(titulo.toLowerCase())) {
+                resultados.add(libro);
             }
         }
-        return null; // Retorna null si no lo encuentra
+
+        return resultados;
     }
 }
